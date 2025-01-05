@@ -17,4 +17,8 @@ class RecipeScreenViewModel : ViewModel() {
             recipeDao.addRecipe(recipe)
         }
     }
+
+    suspend fun getRecipe(id: Int): Recipe {
+        return recipeDao.getRecipe(id)
+    }
 }

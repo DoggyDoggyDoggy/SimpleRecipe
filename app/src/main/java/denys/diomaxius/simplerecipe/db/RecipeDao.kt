@@ -13,4 +13,8 @@ interface RecipeDao {
 
     @Insert
     suspend fun addRecipe(recipe: Recipe)
+
+    @Query("SELECT * FROM RECIPE WHERE id = :recipeId")
+    suspend fun getRecipe(recipeId: Int): Recipe
+
 }

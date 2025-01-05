@@ -4,10 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,8 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import denys.diomaxius.simplerecipe.data.Recipe
 import denys.diomaxius.simplerecipe.navigation.RecipeRoute
 import denys.diomaxius.simplerecipe.viewmodel.RecipeScreenViewModel
@@ -50,30 +52,40 @@ fun RecipesScreen(
             modifier = Modifier.padding(innerPadding)
         ) {
             items(recipeList) { recipe ->
-                RecipeItem(recipe)
+                RecipeItem(
+                    recipe = recipe,
+                    navigate = { recipeId ->
+                        navHostController.navigate("${RecipeRoute.RecipeScreen.title}/$recipeId")
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun RecipeItem(recipe: Recipe) {
+fun RecipeItem(
+    recipe: Recipe,
+    navigate: (Int) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp, vertical = 5.dp)
+            .clickable { navigate(recipe.id) }
     ) {
         Row(
             modifier = Modifier.padding(5.dp)
         ) {
-            Column(
-            ) {
+            Column {
                 Text(
                     text = recipe.title,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp,
                     maxLines = 1
                 )
+
+                Divider()
 
                 Text(
                     text = recipe.description,
@@ -94,9 +106,10 @@ fun RecipeItemPreview() {
     RecipeItem(
         recipe = Recipe(
             title = "Pancake",
-            description = "dfgdfgdfdfgdfzgdfgdfgsdfgdgdsfgdsfgdsfgdfg",
+            description = "Fluffy, golden pancakes that are perfect for breakfast or brunch.",
             recipe = ""
-        )
+        ),
+        navigate = {  }
     )
 }
 
