@@ -12,15 +12,9 @@ class RecipeScreenViewModel : ViewModel() {
 
     val recipesList: LiveData<List<Recipe>> = recipeDao.getAllRecipes()
 
-    fun addRecipe() {
+    fun addRecipe(recipe: Recipe) {
         viewModelScope.launch {
-            recipeDao.addRecipe(
-                Recipe(
-                    title = "Test",
-                    description = "",
-                    recipe = ""
-                )
-            )
+            recipeDao.addRecipe(recipe)
         }
     }
 }

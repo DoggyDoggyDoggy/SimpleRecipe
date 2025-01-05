@@ -24,11 +24,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import denys.diomaxius.simplerecipe.data.Recipe
 
 @Composable
 fun RecipeFormScreen(
     navHostController: NavHostController,
-    addRecipe: () -> Unit
+    addRecipe: (Recipe) -> Unit
 ) {
     var name by remember {
         mutableStateOf("")
@@ -108,7 +109,19 @@ fun RecipeFormScreen(
                 Text(text = "Cancel")
             }
 
-            Button(onClick = { addRecipe() }) {
+            Button(
+                onClick = {
+                    addRecipe(
+                        Recipe(
+                            title = name,
+                            description = description,
+                            recipe = recipe
+                        )
+                    )
+                    navHostController.popBackStack()
+                },
+                enabled = name.isNotEmpty() && description.isNotEmpty() && recipe.isNotEmpty()
+            ) {
                 Text(text = "Save")
             }
         }
