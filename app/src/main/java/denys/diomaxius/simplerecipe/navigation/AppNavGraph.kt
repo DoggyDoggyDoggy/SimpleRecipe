@@ -37,7 +37,7 @@ fun AppNavGraph(
         composable(route = RecipeRoute.RecipeFormScreen.title) {
             RecipeFormScreen(
                 navHostController = navHostController,
-                addRecipe = viewModel::addRecipe
+                viewModel = viewModel
             )
         }
 
