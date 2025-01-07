@@ -62,6 +62,12 @@ class RecipeScreenViewModel : ViewModel() {
         }
     }
 
+    fun deleteRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            recipeDao.deleteTodo(recipeId)
+        }
+    }
+
     suspend fun getRecipe(id: Int): Recipe {
         return recipeDao.getRecipe(id)
     }

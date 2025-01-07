@@ -51,6 +51,8 @@ fun AppNavGraph(
 
             recipe?.let {
                 RecipeScreen(
+                    recipeId = recipeId,
+                    viewModel = viewModel,
                     navHostController = navHostController,
                     recipe = it
                 )
