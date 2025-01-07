@@ -144,7 +144,7 @@ fun RecipeFormScreen(
 
             Button(
                 onClick = {
-                    viewModel.addRecipe()
+                    if (recipeId == null) viewModel.addRecipe() else viewModel.updateRecipe(recipeId)
                     viewModel.resetFields()
                     navHostController.popBackStack()
                 },

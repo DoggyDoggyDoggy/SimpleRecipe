@@ -26,8 +26,8 @@ class RecipeScreenViewModel : ViewModel() {
     private val _categories = MutableLiveData<Categories>(Categories())
     val categories: LiveData<Categories> = _categories
 
-    suspend fun loadRecipe (recipeId: Int) {
-        val recipe : Recipe = getRecipe(recipeId)
+    suspend fun loadRecipe(recipeId: Int) {
+        val recipe: Recipe = getRecipe(recipeId)
 
         _recipeTitle.value = recipe.title
         _description.value = recipe.description
@@ -45,6 +45,7 @@ class RecipeScreenViewModel : ViewModel() {
         }
         _categories.value = Categories(updatedCategories!!)
     }
+
     fun updateRecipeTitle(title: String) {
         _recipeTitle.value = title
     }
@@ -80,6 +81,20 @@ class RecipeScreenViewModel : ViewModel() {
     fun deleteRecipe(recipeId: Int) {
         viewModelScope.launch {
             recipeDao.deleteTodo(recipeId)
+        }
+    }
+
+    fun updateRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            recipeDao.updateRecipe(
+                Recipe(
+                    id = recipeId,
+                    title = _recipeTitle.value!!,
+                    description = _description.value!!,
+                    recipe = _recipeCook.value!!,
+                    categories = _categories.value!!
+                )
+            )
         }
     }
 

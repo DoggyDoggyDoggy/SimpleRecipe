@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import denys.diomaxius.simplerecipe.data.Recipe
 
 @Dao
@@ -19,4 +20,8 @@ interface RecipeDao {
 
     @Query("DELETE FROM RECIPE WHERE id = :recipeId")
     suspend fun deleteTodo(recipeId: Int)
+
+    @Update
+    suspend fun updateRecipe(recipe: Recipe)
+
 }
