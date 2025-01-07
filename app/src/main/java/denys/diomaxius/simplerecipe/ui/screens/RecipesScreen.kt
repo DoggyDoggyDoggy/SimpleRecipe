@@ -43,9 +43,7 @@ fun RecipesScreen(
                 onClick = {
                     navHostController.navigate(RecipeRoute.RecipeFormScreen.title)
                 }
-            ) {
-
-            }
+            ){}
         }
     ) { innerPadding ->
         LazyColumn(

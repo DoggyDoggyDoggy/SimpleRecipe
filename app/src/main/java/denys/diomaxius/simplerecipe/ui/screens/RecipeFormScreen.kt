@@ -16,12 +16,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,19 +29,26 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import denys.diomaxius.simplerecipe.data.Categories
-import denys.diomaxius.simplerecipe.data.Recipe
 import denys.diomaxius.simplerecipe.viewmodel.RecipeScreenViewModel
 
 @Composable
 fun RecipeFormScreen(
     navHostController: NavHostController,
-    viewModel: RecipeScreenViewModel
+    viewModel: RecipeScreenViewModel,
+    recipeId: Int?
 ) {
     val name = viewModel.recipeTitle.observeAsState()
     val description = viewModel.description.observeAsState()
     val recipe = viewModel.recipeCook.observeAsState()
     val categories = viewModel.categories.observeAsState()
+
+    LaunchedEffect(recipeId) {
+        if (recipeId != null) {
+            viewModel.loadRecipe(recipeId)
+        } else {
+            viewModel.resetFields()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -94,7 +97,7 @@ fun RecipeFormScreen(
                 },
                 value = recipe.value ?: "",
                 minLines = 10,
-                onValueChange = { viewModel.updateRecipe(it) }
+                onValueChange = { viewModel.updateRecipeCook(it) }
             )
         }
 
@@ -126,7 +129,10 @@ fun RecipeFormScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
-                onClick = { navHostController.popBackStack() },
+                onClick = {
+                    viewModel.resetFields()
+                    navHostController.popBackStack()
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                     contentColor = Color.Black
@@ -139,6 +145,7 @@ fun RecipeFormScreen(
             Button(
                 onClick = {
                     viewModel.addRecipe()
+                    viewModel.resetFields()
                     navHostController.popBackStack()
                 },
                 enabled = !name.value.isNullOrBlank() && !description.value.isNullOrBlank() && !recipe.value.isNullOrBlank()
@@ -154,7 +161,8 @@ fun RecipeFormScreen(
 @Composable
 fun RecipeFormScreenPreview() {
     RecipeFormScreen(
+        navHostController = rememberNavController(),
         viewModel = viewModel(),
-        navHostController = rememberNavController()
+        recipeId = 1
     )
 }

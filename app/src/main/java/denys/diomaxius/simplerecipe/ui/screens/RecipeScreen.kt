@@ -39,6 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import denys.diomaxius.simplerecipe.data.Categories
 import denys.diomaxius.simplerecipe.data.Recipe
+import denys.diomaxius.simplerecipe.navigation.RecipeRoute
 import denys.diomaxius.simplerecipe.viewmodel.RecipeScreenViewModel
 
 @Composable
@@ -52,7 +53,9 @@ fun RecipeScreen(
         topBar = {
             TopBar(
                 prevPage = { navHostController.popBackStack() },
-                deleteRecipe = { viewModel.deleteRecipe(recipeId = recipeId) }
+                deleteRecipe = { viewModel.deleteRecipe(recipeId = recipeId) },
+                editRecipe = { navHostController.navigate("${RecipeRoute.RecipeFormScreen.title}?recipeId=$recipeId") }
+
             )
         }
     ) { innerPadding ->
@@ -98,7 +101,8 @@ fun RecipeScreen(
 @Composable
 fun TopBar(
     prevPage: () -> Unit,
-    deleteRecipe: () -> Unit
+    deleteRecipe: () -> Unit,
+    editRecipe: () -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -117,7 +121,7 @@ fun TopBar(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        IconButton(onClick = prevPage) {
+        IconButton(onClick = editRecipe) {
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = "Edit"
@@ -171,7 +175,7 @@ fun DeleteRecipeDialog(
                 }
             },
             title = {
-                Text(text = "Delete Recipe")
+                Text(text = "Delete recipe")
             },
             text = {
                 Text(text = "Are you sure you want to delete recipe?")

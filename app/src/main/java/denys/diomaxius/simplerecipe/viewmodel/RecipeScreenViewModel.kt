@@ -26,6 +26,14 @@ class RecipeScreenViewModel : ViewModel() {
     private val _categories = MutableLiveData<Categories>(Categories())
     val categories: LiveData<Categories> = _categories
 
+    suspend fun loadRecipe (recipeId: Int) {
+        val recipe : Recipe = getRecipe(recipeId)
+
+        _recipeTitle.value = recipe.title
+        _description.value = recipe.description
+        _recipeCook.value = recipe.recipe
+        _categories.value = recipe.categories
+    }
 
     fun toggleCategoryChecked(category: Category) {
         val updatedCategories = _categories.value?.categories?.map {
@@ -45,7 +53,7 @@ class RecipeScreenViewModel : ViewModel() {
         _description.value = description
     }
 
-    fun updateRecipe(recipe: String) {
+    fun updateRecipeCook(recipe: String) {
         _recipeCook.value = recipe
     }
 
@@ -60,6 +68,13 @@ class RecipeScreenViewModel : ViewModel() {
                 )
             )
         }
+    }
+
+    fun resetFields() {
+        _description.value = ""
+        _recipeTitle.value = ""
+        _recipeCook.value = ""
+        _categories.value = Categories()
     }
 
     fun deleteRecipe(recipeId: Int) {
