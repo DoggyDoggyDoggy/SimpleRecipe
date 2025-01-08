@@ -17,18 +17,17 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import denys.diomaxius.simplerecipe.data.Recipe
 import denys.diomaxius.simplerecipe.viewmodel.RecipeScreenViewModel
 
 @Composable
@@ -37,10 +36,7 @@ fun RecipeFormScreen(
     viewModel: RecipeScreenViewModel,
     recipeId: Int?
 ) {
-    val name = viewModel.recipeTitle.observeAsState()
-    val description = viewModel.description.observeAsState()
-    val recipe = viewModel.recipeCook.observeAsState()
-    val categories = viewModel.categories.observeAsState()
+    val recipe = viewModel.recipe.observeAsState()
 
     LaunchedEffect(recipeId) {
         if (recipeId != null) {
@@ -58,111 +54,135 @@ fun RecipeFormScreen(
             .verticalScroll(rememberScrollState())
     ) {
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(50.dp)
-        ) {
-            OutlinedTextField(
-                modifier = Modifier.width(230.dp),
-                placeholder = {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        text = "Enter name of your dish",
-                    )
-                },
-                value = name.value ?: "",
-                maxLines = 2,
-                onValueChange = { viewModel.updateRecipeTitle(it) }
-            )
-
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = {
-                    Text(
-                        text = "Enter short description",
-                    )
-                },
-                value = description.value ?: "",
-                minLines = 5,
-                onValueChange = { viewModel.updateDescription(it) }
-            )
-
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = {
-                    Text(
-                        text = "Enter your recipe",
-                    )
-                },
-                value = recipe.value ?: "",
-                minLines = 10,
-                onValueChange = { viewModel.updateRecipeCook(it) }
-            )
-        }
+        Fields(viewModel = viewModel, recipe = recipe)
 
         Divider(modifier = Modifier.padding(vertical = 15.dp))
 
-        Column {
-            Text(
-                text = "Categories:",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
-            )
-            categories.value!!.categories.forEach { category ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(
-                        checked = category.isChecked,
-                        onCheckedChange = { viewModel.toggleCategoryChecked(category) }
-                    )
+        Categories(viewModel = viewModel, recipe = recipe)
 
-                    Text(text = category.name)
-                }
-            }
-        }
+        Buttons(
+            viewModel = viewModel,
+            recipe = recipe,
+            navHostController = navHostController,
+            recipeId = recipeId
+        )
 
+    }
+}
 
-        Row(
+@Composable
+fun Fields(
+    viewModel: RecipeScreenViewModel,
+    recipe: State<Recipe?>
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(50.dp)
+    ) {
+        OutlinedTextField(
+            modifier = Modifier.width(230.dp),
+            placeholder = {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = "Enter name of your dish",
+                )
+            },
+            value = recipe.value?.title ?: "",
+            maxLines = 2,
+            onValueChange = { viewModel.updateRecipeTitle(it) }
+        )
+
+        OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(
-                onClick = {
-                    viewModel.resetFields()
-                    navHostController.popBackStack()
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Black
-                ),
-                border = ButtonDefaults.outlinedButtonBorder
-            ) {
-                Text(text = "Cancel")
-            }
+            placeholder = {
+                Text(
+                    text = "Enter short description",
+                )
+            },
+            value = recipe.value?.description ?: "",
+            minLines = 5,
+            onValueChange = { viewModel.updateDescription(it) }
+        )
 
-            Button(
-                onClick = {
-                    if (recipeId == null) viewModel.addRecipe() else viewModel.updateRecipe(recipeId)
-                    viewModel.resetFields()
-                    navHostController.popBackStack()
-                },
-                enabled = !name.value.isNullOrBlank() && !description.value.isNullOrBlank() && !recipe.value.isNullOrBlank()
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text(
+                    text = "Enter your recipe",
+                )
+            },
+            value = recipe.value?.recipe ?: "",
+            minLines = 10,
+            onValueChange = { viewModel.updateRecipeCook(it) }
+        )
+    }
+}
+
+@Composable
+fun Categories(
+    viewModel: RecipeScreenViewModel,
+    recipe: State<Recipe?>
+) {
+    Column {
+        Text(
+            text = "Categories:",
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp
+        )
+        recipe.value!!.categories.categories.forEach { category ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Save")
+                Checkbox(
+                    checked = category.isChecked,
+                    onCheckedChange = { viewModel.toggleCategoryChecked(category) }
+                )
+
+                Text(text = category.name)
             }
         }
     }
 }
 
-
-@Preview(showBackground = true)
 @Composable
-fun RecipeFormScreenPreview() {
-    RecipeFormScreen(
-        navHostController = rememberNavController(),
-        viewModel = viewModel(),
-        recipeId = 1
-    )
+fun Buttons(
+    viewModel: RecipeScreenViewModel,
+    recipe: State<Recipe?>,
+    navHostController: NavHostController,
+    recipeId: Int?
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Button(
+            onClick = {
+                viewModel.resetFields()
+                navHostController.popBackStack()
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = Color.Black
+            ),
+            border = ButtonDefaults.outlinedButtonBorder
+        ) {
+            Text(text = "Cancel")
+        }
+
+        Button(
+            onClick = {
+                if (recipeId == null) viewModel.addRecipe() else viewModel.updateRecipe(recipeId)
+                viewModel.resetFields()
+                navHostController.popBackStack()
+            },
+            enabled = enableButton(recipe.value!!)
+        ) {
+            Text(text = "Save")
+        }
+    }
+}
+
+fun enableButton(recipe: Recipe): Boolean {
+    return recipe.title.isNotBlank() && recipe.description.isNotBlank() && recipe.recipe.isNotBlank()
 }

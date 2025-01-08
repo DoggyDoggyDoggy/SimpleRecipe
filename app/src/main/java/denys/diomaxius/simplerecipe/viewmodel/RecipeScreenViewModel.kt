@@ -11,71 +11,86 @@ import denys.diomaxius.simplerecipe.data.Recipe
 import kotlinx.coroutines.launch
 
 class RecipeScreenViewModel : ViewModel() {
-    val recipeDao = MyApp.recipeDatabase.getRecipeDao()
+    private val recipeDao = MyApp.recipeDatabase.getRecipeDao()
     val recipesList: LiveData<List<Recipe>> = recipeDao.getAllRecipes()
 
-    private val _recipeTitle = MutableLiveData("")
-    var recipeTitle: LiveData<String> = _recipeTitle
-
-    private val _description = MutableLiveData("")
-    val description: LiveData<String> = _description
-
-    private val _recipeCook = MutableLiveData("")
-    val recipeCook: LiveData<String> = _recipeCook
-
-    private val _categories = MutableLiveData<Categories>(Categories())
-    val categories: LiveData<Categories> = _categories
+    private val _recipe = MutableLiveData<Recipe>(
+        Recipe(
+            title = "",
+            description = "",
+            recipe = "",
+            categories = Categories()
+        )
+    )
+    val recipe: LiveData<Recipe> = _recipe
 
     suspend fun loadRecipe(recipeId: Int) {
         val recipe: Recipe = getRecipe(recipeId)
 
-        _recipeTitle.value = recipe.title
-        _description.value = recipe.description
-        _recipeCook.value = recipe.recipe
-        _categories.value = recipe.categories
+        _recipe.value?.title = recipe.title
+        _recipe.value?.description = recipe.description
+        _recipe.value?.recipe = recipe.recipe
+        _recipe.value?.categories = recipe.categories
     }
 
     fun toggleCategoryChecked(category: Category) {
-        val updatedCategories = _categories.value?.categories?.map {
+        val updatedCategories = _recipe.value?.categories?.categories?.map {
             if (it == category) {
                 it.copy(isChecked = !it.isChecked)
             } else {
                 it
             }
         }
-        _categories.value = Categories(updatedCategories!!)
+
+        _recipe.value = _recipe.value?.copy(
+            categories = Categories(updatedCategories!!)
+        )
     }
 
     fun updateRecipeTitle(title: String) {
-        _recipeTitle.value = title
+        _recipe.value = _recipe.value?.copy(title = title) ?: Recipe(
+            title = title,
+            description = "",
+            recipe = ""
+        )
     }
 
     fun updateDescription(description: String) {
-        _description.value = description
+        _recipe.value = _recipe.value?.copy(description = description) ?: Recipe(
+            title = "",
+            description = description,
+            recipe = ""
+        )
     }
 
     fun updateRecipeCook(recipe: String) {
-        _recipeCook.value = recipe
+        _recipe.value = _recipe.value?.copy(recipe = recipe) ?: Recipe(
+            title = "",
+            description = "",
+            recipe = recipe
+        )
     }
 
     fun addRecipe() {
         viewModelScope.launch {
             recipeDao.addRecipe(
                 Recipe(
-                    title = _recipeTitle.value!!,
-                    description = _description.value!!,
-                    recipe = _recipeCook.value!!,
-                    categories = _categories.value!!
+                    title = _recipe.value?.title!!,
+                    description = _recipe.value?.description!!,
+                    recipe = _recipe.value?.recipe!!,
+                    categories = _recipe.value?.categories!!
                 )
             )
         }
     }
 
     fun resetFields() {
-        _description.value = ""
-        _recipeTitle.value = ""
-        _recipeCook.value = ""
-        _categories.value = Categories()
+        _recipe.value = Recipe(
+            title = "",
+            description = "",
+            recipe = "",
+            categories = Categories()
+        )
     }
 
     fun deleteRecipe(recipeId: Int) {
@@ -89,10 +104,10 @@ class RecipeScreenViewModel : ViewModel() {
             recipeDao.updateRecipe(
                 Recipe(
                     id = recipeId,
-                    title = _recipeTitle.value!!,
-                    description = _description.value!!,
-                    recipe = _recipeCook.value!!,
-                    categories = _categories.value!!
+                    title = _recipe.value?.title!!,
+                    description = _recipe.value?.description!!,
+                    recipe = _recipe.value?.recipe!!,
+                    categories = _recipe.value?.categories!!
                 )
             )
         }
