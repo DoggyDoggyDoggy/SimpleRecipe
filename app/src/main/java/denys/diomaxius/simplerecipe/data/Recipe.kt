@@ -15,9 +15,10 @@ data class Category(
 @Serializable
 data class Categories(
     var categories: List<Category> = listOf(
-        Category(name = "Keto"),
         Category(name = "Healthy"),
-        Category(name = "Easy to Cook")
+        Category(name = "Vegetarian"),
+        Category(name = "Easy to cook"),
+        Category(name = "Keto")
     )
 )
 
