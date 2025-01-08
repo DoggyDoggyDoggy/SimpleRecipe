@@ -24,15 +24,6 @@ class RecipeScreenViewModel : ViewModel() {
     )
     val recipe: LiveData<Recipe> = _recipe
 
-    suspend fun loadRecipe(recipeId: Int) {
-        val recipe: Recipe = getRecipe(recipeId)
-
-        _recipe.value?.title = recipe.title
-        _recipe.value?.description = recipe.description
-        _recipe.value?.recipe = recipe.recipe
-        _recipe.value?.categories = recipe.categories
-    }
-
     fun toggleCategoryChecked(category: Category) {
         val updatedCategories = _recipe.value?.categories?.categories?.map {
             if (it == category) {
@@ -74,12 +65,7 @@ class RecipeScreenViewModel : ViewModel() {
     fun addRecipe() {
         viewModelScope.launch {
             recipeDao.addRecipe(
-                Recipe(
-                    title = _recipe.value?.title!!,
-                    description = _recipe.value?.description!!,
-                    recipe = _recipe.value?.recipe!!,
-                    categories = _recipe.value?.categories!!
-                )
+                _recipe.value!!
             )
         }
     }
@@ -102,15 +88,14 @@ class RecipeScreenViewModel : ViewModel() {
     fun updateRecipe(recipeId: Int) {
         viewModelScope.launch {
             recipeDao.updateRecipe(
-                Recipe(
-                    id = recipeId,
-                    title = _recipe.value?.title!!,
-                    description = _recipe.value?.description!!,
-                    recipe = _recipe.value?.recipe!!,
-                    categories = _recipe.value?.categories!!
-                )
+                _recipe.value!!.copy(id = recipeId)
             )
         }
+    }
+
+    suspend fun loadRecipe(recipeId: Int) {
+        val recipe: Recipe = getRecipe(recipeId)
+        _recipe.value = recipe
     }
 
     suspend fun getRecipe(id: Int): Recipe {
