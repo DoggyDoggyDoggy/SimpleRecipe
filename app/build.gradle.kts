@@ -56,6 +56,7 @@ dependencies {
     val room_version = "2.6.1"
     val lifecycle_version = "2.8.7"
     val nav_version = "2.8.5"
+    implementation ("com.google.accompanist:accompanist-flowlayout:0.24.10-beta")
 
     //Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")

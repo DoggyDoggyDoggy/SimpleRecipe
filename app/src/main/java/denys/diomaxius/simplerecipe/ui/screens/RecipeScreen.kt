@@ -1,6 +1,7 @@
 package denys.diomaxius.simplerecipe.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.flowlayout.FlowRow
 import denys.diomaxius.simplerecipe.data.Categories
 import denys.diomaxius.simplerecipe.data.Recipe
 import denys.diomaxius.simplerecipe.navigation.RecipeRoute
@@ -139,7 +141,7 @@ fun TopBar(
 
         DeleteRecipeDialog(
             showDeleteDialog = showDeleteDialog,
-            dismiss = {showDeleteDialog = false},
+            dismiss = { showDeleteDialog = false },
             deleteRecipe = deleteRecipe,
             prevPage = prevPage
         )
@@ -208,14 +210,18 @@ fun Description(description: String) {
 fun CategoriesUI(categories: Categories) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Top
     ) {
         Text(
             text = "Category:",
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium
         )
-
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            mainAxisSpacing = 5.dp,
+            crossAxisSpacing = 5.dp
+        ) {
         categories.categories.forEach {
             if (it.isChecked) {
                 Text(
@@ -223,7 +229,8 @@ fun CategoriesUI(categories: Categories) {
                     text = it.name
                 )
             }
-        }
+        }}
+
     }
 }
 
