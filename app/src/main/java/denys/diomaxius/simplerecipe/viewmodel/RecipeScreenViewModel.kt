@@ -1,8 +1,10 @@
 package denys.diomaxius.simplerecipe.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import denys.diomaxius.simplerecipe.MyApp
 import denys.diomaxius.simplerecipe.data.Categories
@@ -12,7 +14,10 @@ import kotlinx.coroutines.launch
 
 class RecipeScreenViewModel : ViewModel() {
     private val recipeDao = MyApp.recipeDatabase.getRecipeDao()
-    val recipesList: LiveData<List<Recipe>> = recipeDao.getAllRecipes()
+
+    private val _recipesList = MutableLiveData<List<Recipe>>(emptyList())
+    private val _allRecipesList = MutableLiveData<List<Recipe>>(emptyList())
+    var recipesList: LiveData<List<Recipe>> = _recipesList
 
     private val _recipe = MutableLiveData<Recipe>(
         Recipe(
@@ -23,6 +28,25 @@ class RecipeScreenViewModel : ViewModel() {
         )
     )
     val recipe: LiveData<Recipe> = _recipe
+
+    init {
+        loadAllRecipes()
+        resetRecipesList()
+    }
+
+    private fun resetRecipesList() {
+        _allRecipesList.observeForever { allRecipes ->
+            if (allRecipes != null) {
+                _recipesList.value = allRecipes
+            }
+        }
+    }
+
+    fun loadAllRecipes() {
+        recipeDao.getAllRecipes().observeForever {
+            _allRecipesList.value = it
+        }
+    }
 
     fun toggleCategoryChecked(category: Category) {
         val updatedCategories = _recipe.value?.categories?.categories?.map {
@@ -90,6 +114,13 @@ class RecipeScreenViewModel : ViewModel() {
             recipeDao.updateRecipe(
                 _recipe.value!!.copy(id = recipeId)
             )
+        }
+    }
+
+    fun sortRecipeListByCategory(category: String) {
+        resetRecipesList()
+        _recipesList.value = _recipesList.value?.filter {recipe ->
+            recipe.categories.categories.any { it.name == category && it.isChecked }
         }
     }
 

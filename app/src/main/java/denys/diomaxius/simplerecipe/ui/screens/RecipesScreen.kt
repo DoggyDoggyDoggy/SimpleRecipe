@@ -1,34 +1,53 @@
 package denys.diomaxius.simplerecipe.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import denys.diomaxius.simplerecipe.data.Category
+import denys.diomaxius.simplerecipe.data.CategoryName
 import denys.diomaxius.simplerecipe.data.Recipe
 import denys.diomaxius.simplerecipe.navigation.RecipeRoute
 import denys.diomaxius.simplerecipe.utils.returnMainCategory
 import denys.diomaxius.simplerecipe.viewmodel.RecipeScreenViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -39,36 +58,113 @@ fun RecipesScreen(
 
     val recipeList by viewModel.recipesList.observeAsState(emptyList())
 
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navHostController.navigate(RecipeRoute.RecipeFormScreen.title)
-                }
-            ){}
-        }
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            items(recipeList) { recipe ->
-                RecipeItem(
-                    recipe = recipe,
-                    navigate = { recipeId ->
-                        navHostController.navigate("${RecipeRoute.RecipeScreen.title}/$recipeId")
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet(
+                modifier = Modifier.width(250.dp),
+                drawerContainerColor = Color.Gray,
+                drawerContentColor = Color.White
+            ) {
+                Text("Menu", modifier = Modifier.padding(16.dp))
+
+                Divider()
+
+                NavigationDrawerItem(
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                        .padding(top = 10.dp),
+                    label = {
+                        Text(text = "All recipes")
+                    },
+                    selected = false,
+                    onClick = { viewModel.loadAllRecipes()}
+                )
+
+                NavigationDrawerItem(
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                        .padding(top = 10.dp),
+                    label = {
+                            Text(text = CategoryName.EasyToCook.categoryName)
+                            },
+                    selected = false,
+                    onClick = {
+                        viewModel.sortRecipeListByCategory(CategoryName.EasyToCook.categoryName)
                     }
                 )
+
+                NavigationDrawerItem(
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                        .padding(top = 10.dp),
+                    label = {
+                        Text(text = CategoryName.Vegetarian.categoryName)
+                    },
+                    selected = false,
+                    onClick = {
+                        viewModel.sortRecipeListByCategory(CategoryName.Vegetarian.categoryName)
+                    }
+                )
+            }
+        }
+    ) {
+        Scaffold(
+            topBar = {
+                TopBar(
+                    drawerState = drawerState,
+                    scope = scope
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    modifier = Modifier.clip(shape = CircleShape),
+                    onClick = {
+                        navHostController.navigate(RecipeRoute.RecipeFormScreen.title)
+                    }
+                ) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                }
+            }
+        ) { innerPadding ->
+            LazyColumn(
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                items(recipeList) { recipe ->
+                    RecipeItem(
+                        recipe = recipe,
+                        navigate = { recipeId ->
+                            navHostController.navigate("${RecipeRoute.RecipeScreen.title}/$recipeId")
+                        }
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun TopBar() {
-    Row (
-        modifier = Modifier.fillMaxWidth()
+fun TopBar(drawerState: DrawerState, scope: CoroutineScope) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Gray),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-
+        IconButton(onClick = {
+            scope.launch {
+                drawerState.apply { if (isClosed) open() else close() }
+            }
+        }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Menu,
+                contentDescription = "Menu"
+            )
+        }
     }
 }
 
@@ -99,7 +195,7 @@ fun RecipeItem(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    returnMainCategory(recipe.categories.categories).forEach{
+                    returnMainCategory(recipe.categories.categories).forEach {
                         Text(
                             modifier = Modifier.padding(horizontal = 5.dp),
                             text = it
@@ -131,12 +227,9 @@ fun RecipeItemPreview() {
             description = "Fluffy, golden pancakes that are perfect for breakfast or brunch.",
             recipe = ""
         ),
-        navigate = {  }
+        navigate = { }
     )
 }
-
-
-
 
 
 
