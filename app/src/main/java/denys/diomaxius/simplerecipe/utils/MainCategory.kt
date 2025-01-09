@@ -1,10 +1,15 @@
 package denys.diomaxius.simplerecipe.utils
 
 import denys.diomaxius.simplerecipe.data.Category
+import denys.diomaxius.simplerecipe.data.CategoryName
 
 
 fun returnMainCategory(categories: List<Category>): List<String> {
-    val validCategories = listOf<String>("Healthy", "Easy to cook", "Vegetarian")
+    val validCategories = listOf<String>(
+        CategoryName.Healthy.categoryName,
+        CategoryName.Vegetarian.categoryName,
+        CategoryName.EasyToCook.categoryName
+    )
 
     val categories = categories.filter { it.isChecked }.map { it.name }
 

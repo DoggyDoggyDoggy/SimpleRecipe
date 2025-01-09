@@ -6,26 +6,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class Category(
-    val name: String,
-    var isChecked: Boolean = false
-)
-
-@Serializable
-data class Categories(
-    var categories: List<Category> = listOf(
-        Category(name = "Healthy"),
-        Category(name = "Vegetarian"),
-        Category(name = "Easy to cook"),
-        Category(name = "Keto")
-    )
-)
-
 @Entity
 data class Recipe(
     @PrimaryKey(autoGenerate = true)
-    var id : Int = 0,
+    var id: Int = 0,
     var title: String,
     var description: String,
     var recipe: String,

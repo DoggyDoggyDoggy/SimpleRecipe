@@ -64,6 +64,15 @@ fun RecipesScreen(
 }
 
 @Composable
+fun TopBar() {
+    Row (
+        modifier = Modifier.fillMaxWidth()
+    ) {
+
+    }
+}
+
+@Composable
 fun RecipeItem(
     recipe: Recipe,
     navigate: (Int) -> Unit
