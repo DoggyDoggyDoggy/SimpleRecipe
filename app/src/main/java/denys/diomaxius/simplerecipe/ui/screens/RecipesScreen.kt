@@ -2,6 +2,7 @@ package denys.diomaxius.simplerecipe.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +26,6 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import denys.diomaxius.simplerecipe.data.CategoryName
 import denys.diomaxius.simplerecipe.data.Recipe
+import denys.diomaxius.simplerecipe.data.allRecipes
 import denys.diomaxius.simplerecipe.navigation.RecipeRoute
 import denys.diomaxius.simplerecipe.utils.returnMainCategory
 import denys.diomaxius.simplerecipe.viewmodel.RecipeScreenViewModel
@@ -57,6 +58,7 @@ fun RecipesScreen(
 ) {
 
     val recipeList by viewModel.recipesList.observeAsState(emptyList())
+    val categoryName by viewModel.categoryName.observeAsState(allRecipes)
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -78,10 +80,10 @@ fun RecipesScreen(
                         .padding(horizontal = 5.dp)
                         .padding(top = 10.dp),
                     label = {
-                        Text(text = "All recipes")
+                        Text(text = allRecipes)
                     },
                     selected = false,
-                    onClick = { viewModel.loadAllRecipes()}
+                    onClick = { viewModel.sortRecipeListByCategory(allRecipes)}
                 )
 
                 NavigationDrawerItem(
@@ -116,7 +118,8 @@ fun RecipesScreen(
             topBar = {
                 TopBar(
                     drawerState = drawerState,
-                    scope = scope
+                    scope = scope,
+                    categoryName = categoryName
                 )
             },
             floatingActionButton = {
@@ -147,24 +150,34 @@ fun RecipesScreen(
 }
 
 @Composable
-fun TopBar(drawerState: DrawerState, scope: CoroutineScope) {
-    Row(
+fun TopBar(drawerState: DrawerState, scope: CoroutineScope, categoryName: String) {
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Gray),
-        verticalAlignment = Alignment.CenterVertically
+        contentAlignment = Alignment.Center
     ) {
-        IconButton(onClick = {
-            scope.launch {
-                drawerState.apply { if (isClosed) open() else close() }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = {
+                scope.launch {
+                    drawerState.apply { if (isClosed) open() else close() }
+                }
+            }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Menu"
+                )
             }
         }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Menu,
-                contentDescription = "Menu"
-            )
-        }
+        Text(
+            text = categoryName,
+            modifier = Modifier.align(Alignment.Center)
+        )
     }
 }
 
@@ -198,7 +211,9 @@ fun RecipeItem(
                     returnMainCategory(recipe.categories.categories).forEach {
                         Text(
                             modifier = Modifier.padding(horizontal = 5.dp),
-                            text = it
+                            text = it,
+                            fontSize = 14.sp,
+                            color = Color.Gray
                         )
                     }
                 }
@@ -209,7 +224,7 @@ fun RecipeItem(
                     text = recipe.description,
                     fontWeight = FontWeight.Normal,
                     color = Color.Gray,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     softWrap = true
                 )
             }

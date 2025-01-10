@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import denys.diomaxius.simplerecipe.data.Recipe
+import denys.diomaxius.simplerecipe.data.allRecipes
 import denys.diomaxius.simplerecipe.viewmodel.RecipeScreenViewModel
 
 @Composable

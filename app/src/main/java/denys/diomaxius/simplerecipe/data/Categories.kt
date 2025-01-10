@@ -2,6 +2,8 @@ package denys.diomaxius.simplerecipe.data
 
 import kotlinx.serialization.Serializable
 
+const val allRecipes = "All recipes"
+
 enum class CategoryName(val categoryName: String) {
     Healthy("Healthy"),
     Vegetarian("Vegetarian"),
