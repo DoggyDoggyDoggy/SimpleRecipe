@@ -1,6 +1,5 @@
 package denys.diomaxius.simplerecipe.ui.screens.recipe
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,29 +10,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.flowlayout.FlowRow
 import denys.diomaxius.simplerecipe.R
@@ -73,6 +60,7 @@ fun RecipeScreen(
 
             Divider(
                 modifier = Modifier.width(250.dp),
+                color = MaterialTheme.colorScheme.secondary,
                 thickness = 3.dp
             )
 
@@ -102,57 +90,98 @@ fun RecipeScreen(
 fun Name(title: String) {
     Text(
         text = title,
-        fontSize = 32.sp,
-        fontWeight = FontWeight.Bold
+        style = MaterialTheme.typography.headlineLarge,
+        color = MaterialTheme.colorScheme.secondary
     )
 }
 
 @Composable
 fun Description(description: String) {
-    Text(
-        text = stringResource(R.string.description),
-        fontSize = 26.sp,
-        fontWeight = FontWeight.Medium
-    )
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 15.dp, horizontal = 5.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.description),
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.secondary
 
-    Text(text = description)
+            )
+
+            Text(text = description)
+        }
+    }
 }
 
 @Composable
 fun CategoriesUI(categories: Categories) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top
-    ) {
-        Text(
-            text = stringResource(R.string.category),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
         )
-        FlowRow(
-            modifier = Modifier.fillMaxWidth(),
-            mainAxisSpacing = 5.dp,
-            crossAxisSpacing = 5.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 15.dp, horizontal = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-        categories.categories.forEach {
-            if (it.isChecked) {
-                Text(
-                    modifier = Modifier.padding(horizontal = 5.dp),
-                    text = it.name
-                )
-            }
-        }}
+            Text(
+                text = stringResource(R.string.category),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.secondary
+            )
 
+            Spacer(modifier = Modifier.width(10.dp))
+
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                mainAxisSpacing = 5.dp,
+                crossAxisSpacing = 5.dp
+            ) {
+                categories.categories.forEach {
+                    if (it.isChecked) {
+                        Text(
+                            text = it.name
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
 @Composable
 fun RecipeUI(recipe: String) {
-    Text(
-        text = stringResource(R.string.recipe),
-        fontSize = 26.sp,
-        fontWeight = FontWeight.Medium
-    )
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 15.dp, horizontal = 5.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.recipe),
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.headlineMedium
+            )
 
-    Text(text = recipe)
+            Text(text = recipe)
+        }
+    }
 }

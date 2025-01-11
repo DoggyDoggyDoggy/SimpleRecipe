@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import denys.diomaxius.simplerecipe.R
 import kotlinx.coroutines.CoroutineScope
@@ -53,6 +52,7 @@ fun TopBar(
         Text(
             text = categoryName,
             color = MaterialTheme.colorScheme.onPrimary,
+            style = MaterialTheme.typography.displayMedium,
             modifier = Modifier
                 .align(Alignment.Center)
         )
