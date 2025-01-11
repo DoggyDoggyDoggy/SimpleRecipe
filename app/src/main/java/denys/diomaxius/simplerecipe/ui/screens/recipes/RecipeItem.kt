@@ -1,5 +1,6 @@
 package denys.diomaxius.simplerecipe.ui.screens.recipes
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,7 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,7 +32,10 @@ fun RecipeItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp, vertical = 5.dp)
-            .clickable { navigate(recipe.id) }
+            .clickable { navigate(recipe.id) },
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        )
     ) {
         Row(
             modifier = Modifier.padding(5.dp)
@@ -40,8 +46,8 @@ fun RecipeItem(
                 ) {
                     Text(
                         text = recipe.title,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 20.sp,
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.titleSmall,
                         maxLines = 1
                     )
 
@@ -51,19 +57,20 @@ fun RecipeItem(
                         Text(
                             modifier = Modifier.padding(horizontal = 5.dp),
                             text = it,
-                            fontSize = 14.sp,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.tertiary,
+                            style = MaterialTheme.typography.labelSmall
                         )
                     }
                 }
 
-                Divider()
+                Divider(
+                    color = MaterialTheme.colorScheme.secondary
+                )
 
                 Text(
                     text = recipe.description,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Gray,
-                    fontSize = 16.sp,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
                     softWrap = true,
                     maxLines = 3
                 )

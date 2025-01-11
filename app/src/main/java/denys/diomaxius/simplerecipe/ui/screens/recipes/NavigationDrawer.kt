@@ -3,8 +3,10 @@ package denys.diomaxius.simplerecipe.ui.screens.recipes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,8 +22,8 @@ import androidx.compose.ui.graphics.Color
 fun NavigationDrawer(viewModel : RecipeScreenViewModel) {
     ModalDrawerSheet(
         modifier = Modifier.width(200.dp),
-        drawerContainerColor = Color(0xFF2F5233),
-        drawerContentColor = Color(0xFFB1D8B7)
+        drawerContainerColor = MaterialTheme.colorScheme.secondary,
+        drawerContentColor = MaterialTheme.colorScheme.onSecondary
     ) {
         Text(stringResource(R.string.menu), modifier = Modifier.padding(16.dp))
 

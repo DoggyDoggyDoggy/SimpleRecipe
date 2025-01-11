@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,11 +21,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun TopBar(drawerState: DrawerState, scope: CoroutineScope, categoryName: String) {
+fun TopBar(
+    drawerState: DrawerState,
+    scope: CoroutineScope,
+    categoryName: String
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF2f5233)),
+            .background(MaterialTheme.colorScheme.secondary),
         contentAlignment = Alignment.Center
     ) {
         Row(
@@ -39,6 +44,7 @@ fun TopBar(drawerState: DrawerState, scope: CoroutineScope, categoryName: String
             }
             ) {
                 Icon(
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     imageVector = Icons.Default.Menu,
                     contentDescription = stringResource(R.string.menu)
                 )
@@ -46,7 +52,9 @@ fun TopBar(drawerState: DrawerState, scope: CoroutineScope, categoryName: String
         }
         Text(
             text = categoryName,
-            modifier = Modifier.align(Alignment.Center)
+            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier
+                .align(Alignment.Center)
         )
     }
 }
