@@ -107,7 +107,7 @@ fun Description(description: String) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 15.dp, horizontal = 5.dp),
+                .padding(vertical = 10.dp, horizontal = 5.dp),
         ) {
             Text(
                 text = stringResource(R.string.description),
@@ -133,7 +133,7 @@ fun CategoriesUI(categories: Categories) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 15.dp, horizontal = 5.dp),
+                .padding(vertical = 10.dp, horizontal = 5.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -173,7 +173,7 @@ fun RecipeUI(recipe: String) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 15.dp, horizontal = 5.dp),
+                .padding(vertical = 10.dp, horizontal = 5.dp),
         ) {
             Text(
                 text = stringResource(R.string.recipe),
