@@ -1,10 +1,8 @@
 package denys.diomaxius.simplerecipe.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import denys.diomaxius.simplerecipe.MyApp
 import denys.diomaxius.simplerecipe.data.Categories

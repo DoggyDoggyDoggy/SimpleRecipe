@@ -2,7 +2,6 @@ package denys.diomaxius.simplerecipe.db
 
 import androidx.room.TypeConverter
 import denys.diomaxius.simplerecipe.data.Categories
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

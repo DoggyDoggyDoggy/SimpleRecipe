@@ -1,8 +1,6 @@
 package denys.diomaxius.simplerecipe.ui.screens.recipes
 
-
 import androidx.compose.foundation.layout.padding
-
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape

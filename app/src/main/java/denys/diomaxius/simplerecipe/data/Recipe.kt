@@ -1,10 +1,7 @@
 package denys.diomaxius.simplerecipe.data
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.serialization.Serializable
 
 @Entity
 data class Recipe(

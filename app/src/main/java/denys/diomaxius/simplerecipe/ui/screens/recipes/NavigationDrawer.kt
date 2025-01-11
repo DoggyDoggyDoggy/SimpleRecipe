@@ -6,7 +6,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,7 +15,6 @@ import denys.diomaxius.simplerecipe.R
 import denys.diomaxius.simplerecipe.data.CategoryName
 import denys.diomaxius.simplerecipe.data.allRecipes
 import denys.diomaxius.simplerecipe.viewmodel.RecipeScreenViewModel
-import androidx.compose.ui.graphics.Color
 
 @Composable
 fun NavigationDrawer(viewModel : RecipeScreenViewModel) {
