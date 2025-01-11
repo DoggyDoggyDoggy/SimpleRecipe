@@ -14,9 +14,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import denys.diomaxius.simplerecipe.data.Recipe
-import denys.diomaxius.simplerecipe.ui.screens.RecipeFormScreen
-import denys.diomaxius.simplerecipe.ui.screens.RecipeScreen
-import denys.diomaxius.simplerecipe.ui.screens.RecipesScreen
+import denys.diomaxius.simplerecipe.ui.screens.recipeform.RecipeFormScreen
+import denys.diomaxius.simplerecipe.ui.screens.recipe.RecipeScreen
+import denys.diomaxius.simplerecipe.ui.screens.recipes.RecipesScreen
 import denys.diomaxius.simplerecipe.viewmodel.RecipeScreenViewModel
 
 

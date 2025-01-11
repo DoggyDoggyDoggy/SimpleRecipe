@@ -8,7 +8,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import denys.diomaxius.simplerecipe.navigation.AppNavGraph
-import denys.diomaxius.simplerecipe.ui.screens.RecipesScreen
 import denys.diomaxius.simplerecipe.ui.theme.SimpleRecipeTheme
 
 class MainActivity : ComponentActivity() {

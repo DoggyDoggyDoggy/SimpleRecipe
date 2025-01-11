@@ -1,7 +1,6 @@
-package denys.diomaxius.simplerecipe.ui.screens
+package denys.diomaxius.simplerecipe.ui.screens.recipe
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,14 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.flowlayout.FlowRow
+import denys.diomaxius.simplerecipe.R
 import denys.diomaxius.simplerecipe.data.Categories
 import denys.diomaxius.simplerecipe.data.Recipe
 import denys.diomaxius.simplerecipe.navigation.RecipeRoute
@@ -101,92 +99,6 @@ fun RecipeScreen(
 }
 
 @Composable
-fun TopBar(
-    prevPage: () -> Unit,
-    deleteRecipe: () -> Unit,
-    editRecipe: () -> Unit
-) {
-    var showDeleteDialog by remember { mutableStateOf(false) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Gray),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(onClick = prevPage) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Go back"
-            )
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        IconButton(onClick = editRecipe) {
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "Edit"
-            )
-        }
-
-        IconButton(
-            onClick = { showDeleteDialog = true }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Delete"
-            )
-        }
-
-        DeleteRecipeDialog(
-            showDeleteDialog = showDeleteDialog,
-            dismiss = { showDeleteDialog = false },
-            deleteRecipe = deleteRecipe,
-            prevPage = prevPage
-        )
-    }
-}
-
-
-@Composable
-fun DeleteRecipeDialog(
-    dismiss: () -> Unit,
-    showDeleteDialog: Boolean,
-    deleteRecipe: () -> Unit,
-    prevPage: () -> Unit
-) {
-    if (showDeleteDialog) {
-        AlertDialog(
-            onDismissRequest = dismiss,
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        deleteRecipe()
-                        prevPage()
-                    }
-                ) {
-                    Text("Confirm")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = dismiss
-                ) {
-                    Text("Dismiss")
-                }
-            },
-            title = {
-                Text(text = "Delete recipe")
-            },
-            text = {
-                Text(text = "Are you sure you want to delete recipe?")
-            }
-        )
-    }
-}
-
-@Composable
 fun Name(title: String) {
     Text(
         text = title,
@@ -198,7 +110,7 @@ fun Name(title: String) {
 @Composable
 fun Description(description: String) {
     Text(
-        text = "Description:",
+        text = stringResource(R.string.description),
         fontSize = 26.sp,
         fontWeight = FontWeight.Medium
     )
@@ -213,7 +125,7 @@ fun CategoriesUI(categories: Categories) {
         verticalAlignment = Alignment.Top
     ) {
         Text(
-            text = "Category:",
+            text = stringResource(R.string.category),
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium
         )
@@ -237,7 +149,7 @@ fun CategoriesUI(categories: Categories) {
 @Composable
 fun RecipeUI(recipe: String) {
     Text(
-        text = "Recipe:",
+        text = stringResource(R.string.recipe),
         fontSize = 26.sp,
         fontWeight = FontWeight.Medium
     )
