@@ -5,9 +5,9 @@ SimpleRecipe is an Android application that allows users to add, manage, and org
 ## Screenshots
 Here’s a look at the app:
 
-<img src="https://github.com/user-attachments/assets/9ed6df54-edd6-4001-8b46-20a72b728d6c" width="30%"  height = 625px />
-<img src="https://github.com/user-attachments/assets/0b3692b0-0c64-4a79-8871-6b8b381c485d" width="30%" height = 625px />
-<img src="https://github.com/user-attachments/assets/208b700d-f627-498e-b172-61469b53caf8" width="30%" height = 625px />
+<img src="https://github.com/user-attachments/assets/9ed6df54-edd6-4001-8b46-20a72b728d6c" width="33%"  height = 625px />
+<img src="https://github.com/user-attachments/assets/0b3692b0-0c64-4a79-8871-6b8b381c485d" width="33%" height = 625px />
+<img src="https://github.com/user-attachments/assets/208b700d-f627-498e-b172-61469b53caf8" width="33%" height = 625px />
 
 ## Features
 - **Add Recipes:** Create and save your own recipes.
