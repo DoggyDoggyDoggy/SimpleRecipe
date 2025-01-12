@@ -19,7 +19,7 @@ import denys.diomaxius.simplerecipe.viewmodel.RecipeScreenViewModel
 @Composable
 fun NavigationDrawer(viewModel : RecipeScreenViewModel) {
     ModalDrawerSheet(
-        modifier = Modifier.width(200.dp),
+        modifier = Modifier.width(180.dp),
         drawerContainerColor = MaterialTheme.colorScheme.secondary,
         drawerContentColor = MaterialTheme.colorScheme.onSecondary
     ) {
@@ -38,30 +38,19 @@ fun NavigationDrawer(viewModel : RecipeScreenViewModel) {
             onClick = { viewModel.sortRecipeListByCategory(allRecipes) }
         )
 
-        NavigationDrawerItem(
-            modifier = Modifier
-                .padding(horizontal = 5.dp)
-                .padding(top = 10.dp),
-            label = {
-                Text(text = CategoryName.EasyToCook.categoryName)
-            },
-            selected = false,
-            onClick = {
-                viewModel.sortRecipeListByCategory(CategoryName.EasyToCook.categoryName)
-            }
-        )
-
-        NavigationDrawerItem(
-            modifier = Modifier
-                .padding(horizontal = 5.dp)
-                .padding(top = 10.dp),
-            label = {
-                Text(text = CategoryName.Vegetarian.categoryName)
-            },
-            selected = false,
-            onClick = {
-                viewModel.sortRecipeListByCategory(CategoryName.Vegetarian.categoryName)
-            }
-        )
+        CategoryName.entries.forEach {categoryName ->
+            NavigationDrawerItem(
+                modifier = Modifier
+                    .padding(horizontal = 5.dp)
+                    .padding(top = 10.dp),
+                label = {
+                    Text(text = categoryName.categoryName)
+                },
+                selected = false,
+                onClick = {
+                    viewModel.sortRecipeListByCategory(categoryName.categoryName)
+                }
+            )
+        }
     }
 }
