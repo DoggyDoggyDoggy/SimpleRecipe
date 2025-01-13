@@ -134,7 +134,7 @@ fun CategoriesUI(categories: Categories) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp, horizontal = 5.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = alignmentCategory(categories),
         ) {
             Text(
                 text = stringResource(R.string.category),
@@ -152,7 +152,8 @@ fun CategoriesUI(categories: Categories) {
                 categories.categories.forEach {
                     if (it.isChecked) {
                         Text(
-                            text = it.name
+                            text = it.name,
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
                 }
@@ -184,4 +185,8 @@ fun RecipeUI(recipe: String) {
             Text(text = recipe)
         }
     }
+}
+
+fun alignmentCategory(categories: Categories): Alignment.Vertical {
+    return if (categories.categories.size <= 3) Alignment.CenterVertically else Alignment.Top
 }

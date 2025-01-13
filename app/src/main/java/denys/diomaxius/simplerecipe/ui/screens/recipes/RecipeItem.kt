@@ -46,22 +46,25 @@ fun RecipeItem(
                         style = MaterialTheme.typography.titleSmall,
                         maxLines = 1
                     )
+                }
 
-                    Spacer(modifier = Modifier.weight(1f))
+                Divider(
+                    color = MaterialTheme.colorScheme.secondary
+                )
 
+                Row(
+                    modifier = Modifier.padding(vertical = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     returnMainCategory(recipe.categories.categories).forEach {
                         Text(
-                            modifier = Modifier.padding(horizontal = 5.dp),
+                            modifier = Modifier.padding(end = 5.dp),
                             text = it,
                             color = MaterialTheme.colorScheme.tertiary,
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
                 }
-
-                Divider(
-                    color = MaterialTheme.colorScheme.secondary
-                )
 
                 Text(
                     text = recipe.description,
